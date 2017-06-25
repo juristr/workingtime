@@ -68,10 +68,12 @@ describe('TimecalculatorService', () => {
         expect(workingStats.timeToReachMin).toBeNull();
         expect(workingStats.timeLeft.asMinutes() <= 0).toBeTruthy();
         expect(workingStats.overtime.asMinutes() > 0).toBeTruthy();
+        expect(workingStats.isOvertime).toBeTruthy();
       } else {
         // normal schedule
         expect(moment(workingStats.timeToReachMin).format('HH:mm')).toEqual('18:00');
         expect(workingStats.timeLeft.asMinutes() > 0).toBeTruthy();
+        expect(workingStats.isOvertime).toBeFalsy();
       }
     })
   );
