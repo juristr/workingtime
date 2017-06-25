@@ -49,4 +49,19 @@ describe('TimecalculatorService', () => {
       );
     })
   );
+
+  it(
+    'should calculate the time when the min required amount of hours is reached',
+    inject([TimecalculatorService], (service: TimecalculatorService) => {
+      const stamps = [
+        moment('08:00', 'HH:mm').toDate(),
+        moment('12:00', 'HH:mm').toDate(),
+        moment('14:00', 'HH:mm').toDate()
+      ];
+
+      const workingStats = service.calculateWorkingHours(stamps);
+
+      expect(moment(workingStats.timeToReachMin).format('HH:mm')).toEqual('18:00');
+    })
+  );
 });
