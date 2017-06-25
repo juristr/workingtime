@@ -27,8 +27,8 @@ export class TimeEditComponent implements OnInit {
   constructor(private timeCalculator: TimecalculatorService, private parser: ParserService) {}
 
   ngOnInit() {
-    const stamps = `E07:45 U12:48
-    E13:38`;
+    const stamps = `E08:00 U12:00
+    E14:00`;
     this.calculateWorkTime(stamps);
   }
 
@@ -36,12 +36,12 @@ export class TimeEditComponent implements OnInit {
     const parsedTimes = this.parser.parseAttentanceTimestamps(worktimeBox);
     this.workStats = this.timeCalculator.calculateWorkingHours(parsedTimes);
 
-    this.hoursWorked = moment(this.workStats.hoursWorked).format('HH:mm');
+    this.hoursWorked = moment(this.workStats.hoursWorked).utc().format('HH:mm');
     if (!this.workStats.isOvertime) {
       this.timeLeft = this.workStats.timeLeft.humanize();
       this.timeToReachMin = moment(this.workStats.timeToReachMin).format('HH:mm');
     } else {
-      this.overtime = this.workStats.overtime.humanize();
+      this.overtime = `${this.workStats.overtime.hours()}:${this.workStats.overtime.minutes()}`;
     }
   }
 }

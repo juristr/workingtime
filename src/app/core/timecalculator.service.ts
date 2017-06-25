@@ -24,7 +24,6 @@ export class TimecalculatorService {
 
     let timeToReachMin = null;
     const remainingTime = this._minHoursToWork.subtract(moment.duration(hoursWorkedDiff));
-    const overtime = moment.duration(hoursWorkedDiff).subtract(this._minHoursToWork);
     if (remainingTime.minutes() > 0) {
       timeToReachMin = moment().add(remainingTime);
     }
@@ -32,9 +31,9 @@ export class TimecalculatorService {
     return {
       hoursWorked: hoursWorkedDiff,
       timeLeft: remainingTime,
-      overtime: overtime,
-      timeToReachMin: timeToReachMin,
-      isOvertime: remainingTime.asMinutes() < 0 ? true : false
+      isOvertime: remainingTime.asMinutes() < 0 ? true : false,
+      overtime: remainingTime.abs(), // hacky -> .abs() mutates original obj
+      timeToReachMin: timeToReachMin
     };
   }
 }
