@@ -33,7 +33,7 @@ describe('TimecalculatorService', () => {
   );
 
   it(
-    'should correctly calculate hours for a missing stamp at the end of the day',
+    'should correctly calculate hours for a missing stamp at the end of the day by filling up the missing slot with the actual time',
     inject([TimecalculatorService], (service: TimecalculatorService) => {
       const stamps = [
         moment('08:00', 'HH:mm').toDate(),
@@ -41,8 +41,12 @@ describe('TimecalculatorService', () => {
         moment('14:00', 'HH:mm').toDate()
       ];
 
+      const hoursToCurrentTime = moment().diff(moment(stamps[stamps.length - 1]));
+
       const workingStats = service.calculateWorkingHours(stamps);
-      expect(moment(workingStats.hoursWorked).utc().hours()).toBe(8);
+      expect(moment(workingStats.hoursWorked).utc().hours()).toBe(
+        4 + moment(hoursToCurrentTime).utc().hours()
+      );
     })
   );
 });

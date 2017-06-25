@@ -13,6 +13,12 @@ export class TimecalculatorService {
       i++;
     }
 
+    // if we have an odd number, fill in the gap of the last slot with
+    // the current time
+    if (stamps.length % 2 !== 0) {
+      hoursWorked += moment().diff(moment(stamps[stamps.length - 1]));
+    }
+
     return {
       hoursWorked: hoursWorked
     };
