@@ -61,7 +61,18 @@ describe('TimecalculatorService', () => {
 
       const workingStats = service.calculateWorkingHours(stamps);
 
-      expect(moment(workingStats.timeToReachMin).format('HH:mm')).toEqual('18:00');
+      // if we're running this test after 18:00, then we're already working
+      // overtime, so...
+      if (moment().isAfter(moment('18:00', 'HH:mm'))) {
+        // overtime
+        expect(workingStats.timeToReachMin).toBeNull();
+        expect(workingStats.timeLeft.asMinutes() <= 0).toBeTruthy();
+        expect(workingStats.overtime.asMinutes() > 0).toBeTruthy();
+      } else {
+        // normal schedule
+        expect(moment(workingStats.timeToReachMin).format('HH:mm')).toEqual('18:00');
+        expect(workingStats.timeLeft.asMinutes() > 0).toBeTruthy();
+      }
     })
   );
 });

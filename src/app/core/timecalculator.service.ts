@@ -22,15 +22,18 @@ export class TimecalculatorService {
     }
 
     let timeToReachMin = null;
-    // const hoursWorked = moment(hoursWorkedDiff).hours();
     const remainingTime = this._minHoursToWork.subtract(moment.duration(hoursWorkedDiff));
+    const overtime = moment.duration(hoursWorkedDiff).subtract(this._minHoursToWork);
     if (remainingTime.minutes() > 0) {
       timeToReachMin = moment().add(remainingTime);
+    } else {
+      console.log('>>>>>> overtime');
     }
 
     return {
       hoursWorked: hoursWorkedDiff,
       timeLeft: remainingTime,
+      overtime: overtime,
       timeToReachMin: timeToReachMin
     };
   }
