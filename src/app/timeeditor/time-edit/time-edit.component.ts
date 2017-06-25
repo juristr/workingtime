@@ -18,6 +18,7 @@ export class TimeEditComponent implements OnInit {
     { text: 'Three', cols: 1, rows: 1, color: 'lightpink' },
     { text: 'Four', cols: 2, rows: 1, color: '#DDBDF1' }
   ];
+  timestamps;
   workStats: IWorkStats;
   hoursWorked: string;
   timeLeft: string;
@@ -33,8 +34,8 @@ export class TimeEditComponent implements OnInit {
   }
 
   calculateWorkTime(worktimeBox) {
-    const parsedTimes = this.parser.parseAttentanceTimestamps(worktimeBox);
-    this.workStats = this.timeCalculator.calculateWorkingHours(parsedTimes);
+    this.timestamps = this.parser.parseAttentanceTimestamps(worktimeBox);
+    this.workStats = this.timeCalculator.calculateWorkingHours(this.timestamps);
 
     this.hoursWorked = moment(this.workStats.hoursWorked).utc().format('HH:mm');
     if (!this.workStats.isOvertime) {
