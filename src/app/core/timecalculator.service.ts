@@ -31,7 +31,7 @@ export class TimecalculatorService {
       hoursWorked: hoursWorkedDiff,
       timeLeft: remainingTime,
       isOvertime: remainingTime.asMinutes() < 0 ? true : false,
-      overtime: remainingTime.abs(), // hacky -> .abs() mutates original obj
+      overtime: moment.duration(remainingTime.asMilliseconds()).abs(), // hacky.. to not mutate original one
       timeToReachMin: timeToReachMin
     };
   }
