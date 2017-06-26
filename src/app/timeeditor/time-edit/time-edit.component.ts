@@ -28,21 +28,23 @@ export class TimeEditComponent implements OnInit {
   constructor(private timeCalculator: TimecalculatorService, private parser: ParserService) {}
 
   ngOnInit() {
-    const stamps = `E08:00 U12:00
-    E14:00`;
-    this.calculateWorkTime(stamps);
+    const stamps = `E07:45 U12:18
+    E13:28 U17:20`;
+    // this.calculateWorkTime(stamps);
   }
 
   calculateWorkTime(worktimeBox) {
-    this.timestamps = this.parser.parseAttentanceTimestamps(worktimeBox);
-    this.workStats = this.timeCalculator.calculateWorkingHours(this.timestamps);
+    if (worktimeBox && worktimeBox !== '') {
+      this.timestamps = this.parser.parseAttentanceTimestamps(worktimeBox);
+      this.workStats = this.timeCalculator.calculateWorkingHours(this.timestamps);
 
-    this.hoursWorked = moment(this.workStats.hoursWorked).utc().format('HH:mm');
-    if (!this.workStats.isOvertime) {
-      this.timeLeft = this.workStats.timeLeft.humanize();
-      this.timeToReachMin = moment(this.workStats.timeToReachMin).format('HH:mm');
-    } else {
-      this.overtime = `${this.workStats.overtime.hours()}:${this.workStats.overtime.minutes()}`;
+      this.hoursWorked = moment(this.workStats.hoursWorked).utc().format('HH:mm');
+      if (!this.workStats.isOvertime) {
+        this.timeLeft = moment.utc(this.workStats.timeLeft.asMilliseconds()).format('HH:mm');
+        this.timeToReachMin = moment(this.workStats.timeToReachMin).format('HH:mm');
+      } else {
+        this.overtime = moment.utc(this.workStats.overtime.asMilliseconds()).format('HH:mm');
+      }
     }
   }
 }

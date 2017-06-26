@@ -4,12 +4,11 @@ import { IWorkStats } from './work-stats.interface';
 
 @Injectable()
 export class TimecalculatorService {
-  _minHoursToWork = moment.duration('08:00');
-
   constructor() {}
 
   calculateWorkingHours(stamps: Date[]): IWorkStats {
     let hoursWorkedDiff = 0;
+    const _minHoursToWork = moment.duration('08:00');
 
     for (let i = 0; i < stamps.length - 1; i++) {
       hoursWorkedDiff += moment(stamps[i + 1]).diff(moment(stamps[i]));
@@ -23,7 +22,7 @@ export class TimecalculatorService {
     }
 
     let timeToReachMin = null;
-    const remainingTime = this._minHoursToWork.subtract(moment.duration(hoursWorkedDiff));
+    const remainingTime = _minHoursToWork.subtract(moment.duration(hoursWorkedDiff));
     if (remainingTime.minutes() > 0) {
       timeToReachMin = moment().add(remainingTime);
     }
